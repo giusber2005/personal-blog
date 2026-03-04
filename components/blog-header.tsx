@@ -14,7 +14,7 @@ export function BlogHeader() {
           Writing
         </Link>
         <Link
-          href="/"
+          href="/about"
           className="text-muted-foreground text-sm hover:text-primary transition-colors"
         >
           About
