@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter, Newsreader } from 'next/font/google'
+import { Barriecito } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const _newsreader = Newsreader({ subsets: ["latin"], variable: "--font-newsreader", style: ["normal", "italic"] });
+const _barriecito = Barriecito({ subsets: ["latin"], variable: "--font-barriecito", weight: "400" });
 
 export const metadata: Metadata = {
   title: 'Journal',
@@ -36,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${_inter.variable} ${_newsreader.variable} font-sans antialiased`}>
+      <body className={`${_barriecito.variable} font-sans antialiased`}>
         {children}
         <Analytics />
       </body>
