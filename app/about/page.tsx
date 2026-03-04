@@ -1,5 +1,6 @@
 import { BlogHeader } from "@/components/blog-header"
 import { BlogFooter } from "@/components/blog-footer"
+import Image from "next/image"
 
 const contacts = [
   { label: "X", href: "https://x.com" },
@@ -16,9 +17,19 @@ export default function AboutPage() {
         <BlogHeader />
 
         <section className="py-12 md:py-20">
-          <h1 className="font-serif text-4xl md:text-5xl text-foreground leading-tight text-pretty mb-10">
-            About
-          </h1>
+          <div className="mb-10 flex items-start gap-8">
+            <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border border-border">
+              <Image
+                src="/placeholder-user.jpg"
+                alt="Avatar"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <h1 className="font-serif text-4xl md:text-5xl text-foreground leading-tight text-pretty pt-2">
+              About
+            </h1>
+          </div>
 
           <div className="flex flex-col gap-6 mb-16">
             <p className="text-muted-foreground text-base leading-relaxed">

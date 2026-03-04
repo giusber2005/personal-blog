@@ -97,3 +97,11 @@ export function getFeaturedPost(): Post {
 export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((post) => post.slug === slug)
 }
+
+export function getPostsByCategory(category: string): Post[] {
+  return posts.filter((post) => post.category.toLowerCase() === category.toLowerCase())
+}
+
+export function getAllCategories(): string[] {
+  return [...new Set(posts.map((post) => post.category))]
+}
