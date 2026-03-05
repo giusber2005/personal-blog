@@ -1,0 +1,111 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const path = require('path')
+
+const args = process.argv.slice(2)
+
+if (args.length < 1) {
+  console.error('Usage: remove-article <markdown-file.md>')
+  console.error('Example: remove-article my-article.md')
+  process.exit(1)
+}
+
+const [mdFilePath] = args
+
+const resolvedMdPath = path.resolve(process.cwd(), mdFilePath)
+if (!fs.existsSync(resolvedMdPath)) {
+  console.error(`Error: File not found: ${resolvedMdPath}`)
+  process.exit(1)
+}
+
+const rawContent = fs.readFileSync(resolvedMdPath, 'utf-8')
+
+function parseFrontmatter(raw) {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/)
+  if (!match) {
+    console.error('Error: Markdown file must begin with frontmatter delimited by ---')
+    console.error('See scripts/template.md for the expected format.')
+    process.exit(1)
+  }
+
+  const frontmatter = {}
+  for (const line of match[1].split(/\r?\n/)) {
+    const colonIdx = line.indexOf(':')
+    if (colonIdx === -1) continue
+    const key   = line.slice(0, colonIdx).trim()
+    const value = line.slice(colonIdx + 1).trim()
+    if (key) frontmatter[key] = value
+  }
+  return frontmatter
+}
+
+function toSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
+const frontmatter = parseFrontmatter(rawContent)
+
+if (!frontmatter.title && !frontmatter.slug) {
+  console.error('Error: frontmatter must include a "title" or "slug" field to identify the article')
+  process.exit(1)
+}
+
+const slug  = frontmatter.slug  || toSlug(frontmatter.title)
+const title = frontmatter.title || slug
+
+const postsFilePath = path.resolve(__dirname, '..', 'lib', 'posts.ts')
+if (!fs.existsSync(postsFilePath)) {
+  console.error(`Error: Could not find lib/posts.ts at: ${postsFilePath}`)
+  process.exit(1)
+}
+
+const lines = fs.readFileSync(postsFilePath, 'utf-8').split('\n')
+
+// Find the line containing slug: "..."
+const slugLineIdx = lines.findIndex(l => l.includes(`slug: "${slug}"`))
+if (slugLineIdx === -1) {
+  console.error(`Error: No article found with slug "${slug}" in lib/posts.ts`)
+  process.exit(1)
+}
+
+// Walk backward to the opening  {  of the post object
+let startIdx = slugLineIdx
+while (startIdx > 0 && lines[startIdx].trim() !== '{') {
+  startIdx--
+}
+if (lines[startIdx].trim() !== '{') {
+  console.error(`Error: Could not locate start of post block for slug "${slug}"`)
+  process.exit(1)
+}
+
+// Walk forward to the closing  },  of the post object
+let endIdx = slugLineIdx
+while (endIdx < lines.length && lines[endIdx].trim() !== '},') {
+  endIdx++
+}
+if (endIdx >= lines.length) {
+  console.error(`Error: Could not locate end of post block for slug "${slug}"`)
+  process.exit(1)
+}
+
+// Also remove a trailing blank line left by add-article, if present
+const trailingBlank = endIdx + 1 < lines.length && lines[endIdx + 1].trim() === ''
+const deleteCount    = endIdx - startIdx + 1 + (trailingBlank ? 1 : 0)
+
+lines.splice(startIdx, deleteCount)
+
+// Clean up any accidental triple newlines
+const result = lines.join('\n').replace(/\n{3,}/g, '\n\n')
+
+fs.writeFileSync(postsFilePath, result, 'utf-8')
+
+console.log('')
+console.log('Article removed from lib/posts.ts')
+console.log('')
+console.log('  Title:  ' + title)
+console.log('  Slug:   ' + slug)
+console.log('')
