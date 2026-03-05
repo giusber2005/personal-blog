@@ -1,12 +1,14 @@
 ---
-X: https://x.com
-Instagram: https://instagram.com
-Facebook: https://facebook.com
-GitHub: https://github.com
-Stack Overflow: https://stackoverflow.com
+X: https://x.com/Giusber2005Bo
+Instagram: https://www.instagram.com/giuseppe_berardii/
+Facebook: https://www.facebook.com/profile.php?id=100090295570517
+GitHub: https://github.com/giusber2005
+Stack Overflow: https://stackoverflow.com/users/26305304/giusber2005
 ---
-I write about design, code, and the overlap between them. This journal is a place to think out loud — slowly, carefully, without the pressure of being finished.
+Giuseppe Berardi, cybersecurity, math, and computer science entusiast from Bologna, Italy.
 
-My work lives at the intersection of craft and clarity. I care about the decisions that are invisible when they are right, and obvious when they are wrong. Typography, whitespace, the weight of a word.
+Love exploring and be creative with my work, the only way to freely express my thoughts.
 
-I believe good work takes time. Not because it has to be slow, but because attention is not something you can rush.
+Aspiring to leave something meaningful, a new perspective, an inspiring story.
+
+I like listening to music, almost anything.
