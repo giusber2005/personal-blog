@@ -1,10 +1,13 @@
 import { BlogHeader } from "@/components/blog-header"
 import { BlogFooter } from "@/components/blog-footer"
 import { getAboutData } from "@/lib/about"
+import { getAnalytics } from "@/lib/analytics"
+import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import Image from "next/image"
 
 export default function AboutPage() {
   const { bio, contacts } = getAboutData()
+  const analytics = getAnalytics()
 
   return (
     <div className="min-h-screen bg-background">
@@ -15,7 +18,7 @@ export default function AboutPage() {
           <div className="mb-10 flex items-start gap-8">
             <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full border border-border">
               <Image
-                src="/placeholder-user.jpg"
+                src="/public/phantom.jpeg"
                 alt="Avatar"
                 fill
                 className="object-cover"
@@ -52,6 +55,13 @@ export default function AboutPage() {
                 </a>
               ))}
             </div>
+          </div>
+
+          <div className="mt-16">
+            <h2 className="text-xs tracking-widest uppercase text-primary/70 mb-4">
+              Writing Stats
+            </h2>
+            <AnalyticsDashboard data={analytics} />
           </div>
         </section>
 
